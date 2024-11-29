@@ -45,9 +45,7 @@ const EmployeeList: React.FC = () => {
         toast.success("Employee deleted successfully!");
       })
       .catch((error) => {
-        toast.error(
-          `Failed to delete employee: ${error.message || "Unknown error"}`
-        );
+        toast.error(`Failed to delete employee: ${error || "Unknown error"}`);
       });
   };
 

@@ -34,11 +34,15 @@ export const fetchEmployees = createAsyncThunk(
 
 export const deleteEmployee = createAsyncThunk(
   "employees/deleteEmployee",
-  async (id: string) => {
-    await axios.delete(
-      `${API_BASE_URL}/employee-remove/66f26341aa89fa4a244b22`
-    );
-    return id;
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/employee-remove/${id}`);
+      return id; // Return the id if delete is successful
+    } catch (error: any) {
+      // Extract the error message from the axios error response if available
+      const errorMessage = error?.response?.data?.message || "Unknown error";
+      return rejectWithValue(errorMessage); // Reject with the error message
+    }
   }
 );
 
