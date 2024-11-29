@@ -48,7 +48,7 @@ const EmployeeForm: React.FC = () => {
         }
 
         // Navigate to the home page after successful submission
-        navigate("/");
+        // navigate("/");
       } catch (error: any) {
         toast.error(
           `Failed to ${form._id ? "update" : "create"} employee: ${

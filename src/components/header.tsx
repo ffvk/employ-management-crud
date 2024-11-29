@@ -11,13 +11,17 @@ const Header: React.FC = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        {employee && (
+        {employee ? (
           <>
             <Avatar src={employee.image} alt={employee.fullName} />
             <Typography variant="h6" sx={{ ml: 2 }}>
               {employee.fullName}
             </Typography>
           </>
+        ) : (
+          <Typography variant="h6" sx={{ ml: 2 }}>
+            Welcome Employee of Fortmindz
+          </Typography>
         )}
       </Toolbar>
     </AppBar>

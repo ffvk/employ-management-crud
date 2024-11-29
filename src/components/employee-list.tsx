@@ -35,7 +35,8 @@ const EmployeeList: React.FC = () => {
     dispatch(fetchEmployees());
   }, [dispatch]);
 
-  const handleEdit = (_id: string) => {
+  const handleEdit = (_id: string, event: React.MouseEvent) => {
+    event.stopPropagation();
     const selected = employees.find((emp) => emp._id === _id);
     if (selected) {
       dispatch(selectEmployee(selected));
@@ -43,7 +44,8 @@ const EmployeeList: React.FC = () => {
     }
   };
 
-  const handleDelete = (_id: string) => {
+  const handleDelete = (_id: string, event: React.MouseEvent) => {
+    event.stopPropagation();
     dispatch(deleteEmployee(_id))
       .then(() => {
         toast.success("Employee deleted successfully!");
@@ -95,8 +97,10 @@ const EmployeeList: React.FC = () => {
                 <TableCell>{emp.email}</TableCell>
                 <TableCell>{emp.position}</TableCell>
                 <TableCell>
-                  <Button onClick={() => handleEdit(emp._id)}>Edit</Button>
-                  <Button onClick={() => handleDelete(emp._id)}>Delete</Button>
+                  <Button onClick={(e) => handleEdit(emp._id, e)}>Edit</Button>
+                  <Button onClick={(e) => handleDelete(emp._id, e)}>
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))
