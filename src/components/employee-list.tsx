@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
 const EmployeeList: React.FC = () => {
   const employees = useSelector((state: RootState) => state.employees.list);
   const dispatch = useDispatch<AppDispatch>();
@@ -24,19 +25,22 @@ const EmployeeList: React.FC = () => {
     dispatch(fetchEmployees());
   }, [dispatch]);
 
-  const handleEdit = (id: number) => {
-    const selected = employees.find((emp) => emp.id === id);
+  // Update the handleEdit function to use '_id' instead of 'id'
+  const handleEdit = (_id: string) => {
+    console.log("  _id", _id);
+
+    const selected = employees.find((emp) => emp._id === _id); // Use '_id' for search
+
     if (selected) {
       dispatch(selectEmployee(selected));
-      navigate(`/edit/${id}`);
+      navigate(`/edit/${_id}`); // Pass '_id' for navigation
     }
   };
 
-  const handleDelete = (id: number) => {
-    dispatch(deleteEmployee(id));
+  // Update the handleDelete function to use '_id' instead of 'id'
+  const handleDelete = (_id: string) => {
+    dispatch(deleteEmployee(_id)); // Use '_id' for deletion
   };
-
-  console.log("employees", employees);
 
   return (
     <Table>
@@ -51,13 +55,19 @@ const EmployeeList: React.FC = () => {
       <TableBody>
         {Array.isArray(employees) && employees.length > 0 ? (
           employees.map((emp) => (
-            <TableRow key={emp.id}>
-              <TableCell>{emp.name}</TableCell>
+            <TableRow key={emp._id}>
+              {" "}
+              {/* Use '_id' as the key */}
+              <TableCell>{emp.fullName}</TableCell>
               <TableCell>{emp.email}</TableCell>
               <TableCell>{emp.position}</TableCell>
               <TableCell>
-                <Button onClick={() => handleEdit(emp.id)}>Edit</Button>
-                <Button onClick={() => handleDelete(emp.id)}>Delete</Button>
+                <Button onClick={() => handleEdit(emp._id)}>Edit</Button>{" "}
+                {/* Pass '_id' */}
+                <Button onClick={() => handleDelete(emp._id)}>
+                  Delete
+                </Button>{" "}
+                {/* Pass '_id' */}
               </TableCell>
             </TableRow>
           ))

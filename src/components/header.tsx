@@ -13,9 +13,9 @@ const Header: React.FC = () => {
       <Toolbar>
         {employee && (
           <>
-            <Avatar src={employee.image} alt={employee.name} />
+            <Avatar src={employee.image} alt={employee.fullName} />
             <Typography variant="h6" sx={{ ml: 2 }}>
-              {employee.name}
+              {employee.fullName}
             </Typography>
           </>
         )}

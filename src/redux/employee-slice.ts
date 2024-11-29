@@ -4,8 +4,8 @@ import axios from "axios";
 const API_BASE_URL = "<YOUR_BASE_URL>"; // Replace with the base URL from Postman.
 
 export interface Employee {
-  id: number;
-  name: string;
+  _id: string;
+  fullName: string;
   email: string;
   position: string;
   image: string; // Dummy image URL
@@ -36,7 +36,7 @@ export const fetchEmployees = createAsyncThunk(
 
 export const deleteEmployee = createAsyncThunk(
   "employees/deleteEmployee",
-  async (id: number) => {
+  async (id: string) => {
     await axios.delete(
       `https://interviewtesting.onrender.com/v1/users/employee-remove/66f26341aa89fa4a244b22`
     );
@@ -48,7 +48,7 @@ export const updateEmployee = createAsyncThunk(
   "employees/updateEmployee",
   async (employee: Employee) => {
     const response = await axios.put(
-      `${API_BASE_URL}/employees/${employee.id}`,
+      `https://interviewtesting.onrender.com/v1/users/employee-update/${employee._id}`,
       employee
     );
     return response.data;
@@ -71,11 +71,11 @@ const employeeSlice = createSlice({
         state.status = "succeeded";
       })
       .addCase(deleteEmployee.fulfilled, (state, action) => {
-        state.list = state.list.filter((emp) => emp.id !== action.payload);
+        state.list = state.list.filter((emp) => emp._id !== action.payload);
       })
       .addCase(updateEmployee.fulfilled, (state, action) => {
         state.list = state.list.map((emp) =>
-          emp.id === action.payload.id ? action.payload : emp
+          emp._id === action.payload.id ? action.payload : emp
         );
         state.selectedEmployee = action.payload;
       });

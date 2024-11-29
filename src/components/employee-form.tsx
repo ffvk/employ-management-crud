@@ -14,8 +14,8 @@ const EmployeeForm: React.FC = () => {
 
   // Default fallback to avoid null initialization
   const [form, setForm] = useState({
-    id: employee?.id || 0,
-    name: employee?.name || "",
+    _id: employee?._id || "",
+    fullName: employee?.fullName || "",
     email: employee?.email || "",
     position: employee?.position || "",
     image: employee?.image || "",
@@ -45,7 +45,7 @@ const EmployeeForm: React.FC = () => {
       <TextField
         label="Name"
         name="name"
-        value={form.name}
+        value={form.fullName}
         onChange={handleChange}
         fullWidth
         margin="normal"
