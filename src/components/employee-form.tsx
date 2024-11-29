@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
-import { updateEmployee } from "../redux/employee-slice";
+import { updateEmployee, createEmployee } from "../redux/employee-slice";
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -37,13 +37,23 @@ const EmployeeForm: React.FC = () => {
   const handleSubmit = async () => {
     if (form) {
       try {
-        await dispatch(updateEmployee(form)).unwrap();
-        toast.success("Employee updated successfully!");
+        if (form._id) {
+          // Update employee
+          await dispatch(updateEmployee(form)).unwrap();
+          toast.success("Employee updated successfully!");
+        } else {
+          // Create new employee
+          await dispatch(createEmployee(form)).unwrap();
+          toast.success("Employee created successfully!");
+        }
 
+        // Navigate to the home page after successful submission
         navigate("/");
       } catch (error: any) {
         toast.error(
-          `Failed to update employee: ${error.message || "Unknown error"}`
+          `Failed to ${form._id ? "update" : "create"} employee: ${
+            error.message || "Unknown error"
+          }`
         );
       }
     }
@@ -52,7 +62,7 @@ const EmployeeForm: React.FC = () => {
   return (
     <form>
       <TextField
-        label="fullName"
+        label="Full Name"
         name="fullName"
         value={form.fullName}
         onChange={handleChange}
@@ -76,7 +86,7 @@ const EmployeeForm: React.FC = () => {
         margin="normal"
       />
       <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Update
+        {form._id ? "Update" : "Create"} Employee
       </Button>
     </form>
   );

@@ -57,6 +57,22 @@ export const updateEmployee = createAsyncThunk(
   }
 );
 
+export const createEmployee = createAsyncThunk(
+  "employees/createEmployee",
+  async (employee: Employee, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/employee/create`,
+        employee
+      );
+      return response.data; // Return the created employee data
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || "Unknown error";
+      return rejectWithValue(errorMessage); // Reject with the error message
+    }
+  }
+);
+
 // Slice
 const employeeSlice = createSlice({
   name: "employees",

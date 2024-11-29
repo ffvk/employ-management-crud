@@ -5,6 +5,7 @@ import {
   fetchEmployees,
   deleteEmployee,
   selectEmployee,
+  createEmployee,
 } from "../redux/employee-slice";
 import {
   Button,
@@ -17,6 +18,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+// Define Employee type if not already defined
+interface Employee {
+  _id: string;
+  fullName: string;
+  email: string;
+  position: string;
+}
+
 const EmployeeList: React.FC = () => {
   const employees = useSelector((state: RootState) => state.employees.list);
   const dispatch = useDispatch<AppDispatch>();
@@ -26,65 +35,70 @@ const EmployeeList: React.FC = () => {
     dispatch(fetchEmployees());
   }, [dispatch]);
 
-  // Update the handleEdit function to use '_id' instead of 'id'
   const handleEdit = (_id: string) => {
-    console.log("  _id", _id);
-
-    const selected = employees.find((emp) => emp._id === _id); // Use '_id' for search
-
+    const selected = employees.find((emp) => emp._id === _id);
     if (selected) {
       dispatch(selectEmployee(selected));
-      navigate(`/edit/${_id}`); // Pass '_id' for navigation
+      navigate(`/edit/${_id}`);
     }
   };
 
-  // Update the handleDelete function to use '_id' instead of 'id'
   const handleDelete = (_id: string) => {
     dispatch(deleteEmployee(_id))
       .then(() => {
         toast.success("Employee deleted successfully!");
       })
       .catch((error) => {
-        toast.error(`Failed to delete employee: ${error || "Unknown error"}`);
+        toast.error(
+          `Failed to delete employee: ${error.message || "Unknown error"}`
+        );
       });
   };
 
+  const handleCreate = () => {
+    navigate(`/create`);
+  };
+
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell>Email</TableCell>
-          <TableCell>Position</TableCell>
-          <TableCell>Actions</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {Array.isArray(employees) && employees.length > 0 ? (
-          employees.map((emp) => (
-            <TableRow key={emp._id}>
-              {" "}
-              {/* Use '_id' as the key */}
-              <TableCell>{emp.fullName}</TableCell>
-              <TableCell>{emp.email}</TableCell>
-              <TableCell>{emp.position}</TableCell>
-              <TableCell>
-                <Button onClick={() => handleEdit(emp._id)}>Edit</Button>{" "}
-                {/* Pass '_id' */}
-                <Button onClick={() => handleDelete(emp._id)}>
-                  Delete
-                </Button>{" "}
-                {/* Pass '_id' */}
-              </TableCell>
-            </TableRow>
-          ))
-        ) : (
+    <div>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleCreate()} // Pass the employee object here
+      >
+        Create Employee
+      </Button>
+
+      <Table>
+        <TableHead>
           <TableRow>
-            <TableCell colSpan={4}>No employees found</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Position</TableCell>
+            <TableCell>Actions</TableCell>
           </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        </TableHead>
+        <TableBody>
+          {Array.isArray(employees) && employees.length > 0 ? (
+            employees.map((emp) => (
+              <TableRow key={emp._id}>
+                <TableCell>{emp.fullName}</TableCell>
+                <TableCell>{emp.email}</TableCell>
+                <TableCell>{emp.position}</TableCell>
+                <TableCell>
+                  <Button onClick={() => handleEdit(emp._id)}>Edit</Button>
+                  <Button onClick={() => handleDelete(emp._id)}>Delete</Button>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4}>No employees found</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 
