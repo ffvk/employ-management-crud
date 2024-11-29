@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE_URL = "<YOUR_BASE_URL>"; // Replace with the base URL from Postman.
+const API_BASE_URL = "https://interviewtesting.onrender.com/v1/users"; // Replace with the base URL from Postman.
 
 export interface Employee {
   _id: string;
@@ -27,9 +27,7 @@ const initialState: EmployeeState = {
 export const fetchEmployees = createAsyncThunk(
   "employees/fetchEmployees",
   async () => {
-    const response = await axios.get(
-      `https://interviewtesting.onrender.com/v1/users/employee/list`
-    );
+    const response = await axios.get(`${API_BASE_URL}/employee/list`);
     return response.data.data;
   }
 );
@@ -38,7 +36,7 @@ export const deleteEmployee = createAsyncThunk(
   "employees/deleteEmployee",
   async (id: string) => {
     await axios.delete(
-      `https://interviewtesting.onrender.com/v1/users/employee-remove/66f26341aa89fa4a244b22`
+      `${API_BASE_URL}/employee-remove/66f26341aa89fa4a244b22`
     );
     return id;
   }
@@ -48,7 +46,7 @@ export const updateEmployee = createAsyncThunk(
   "employees/updateEmployee",
   async (employee: Employee) => {
     const response = await axios.put(
-      `https://interviewtesting.onrender.com/v1/users/employee-update/${employee._id}`,
+      `${API_BASE_URL}/employee-update/${employee._id}`,
       employee
     );
     return response.data;

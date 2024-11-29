@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EmployeeList: React.FC = () => {
   const employees = useSelector((state: RootState) => state.employees.list);
@@ -39,7 +40,15 @@ const EmployeeList: React.FC = () => {
 
   // Update the handleDelete function to use '_id' instead of 'id'
   const handleDelete = (_id: string) => {
-    dispatch(deleteEmployee(_id)); // Use '_id' for deletion
+    dispatch(deleteEmployee(_id))
+      .then(() => {
+        toast.success("Employee deleted successfully!");
+      })
+      .catch((error) => {
+        toast.error(
+          `Failed to delete employee: ${error.message || "Unknown error"}`
+        );
+      });
   };
 
   return (
