@@ -37,7 +37,9 @@ export const fetchEmployees = createAsyncThunk(
 export const deleteEmployee = createAsyncThunk(
   "employees/deleteEmployee",
   async (id: number) => {
-    await axios.delete(`${API_BASE_URL}/employees/${id}`);
+    await axios.delete(
+      `https://interviewtesting.onrender.com/v1/users/employee-remove/66f26341aa89fa4a244b22`
+    );
     return id;
   }
 );
