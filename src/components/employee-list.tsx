@@ -27,8 +27,8 @@ const EmployeeList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  // State to manage the modal visibility and selected employee
-  const [openModal, setOpenModal] = useState(false);
+  const [openEmployeeModal, setOpenEmployeeModal] = useState(false);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
 
   useEffect(() => {
@@ -44,11 +44,11 @@ const EmployeeList: React.FC = () => {
     }
   };
 
-  const handleDelete = (_id: string, event: React.MouseEvent) => {
-    event.stopPropagation();
+  const handleDelete = (_id: string) => {
     dispatch(deleteEmployee(_id))
       .then(() => {
         toast.success("Employee deleted successfully!");
+        setOpenConfirmModal(false); // Close the confirmation dialog
       })
       .catch((error) => {
         toast.error(
@@ -62,12 +62,22 @@ const EmployeeList: React.FC = () => {
   };
 
   const handleRowClick = (employee: any) => {
-    setSelectedEmployee(employee); // Set the selected employee data
-    setOpenModal(true); // Open the modal
+    setSelectedEmployee(employee);
+    setOpenEmployeeModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false); // Close the modal
+  const handleOpenConfirmModal = (employee: any, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setSelectedEmployee(employee);
+    setOpenConfirmModal(true);
+  };
+
+  const handleCloseEmployeeModal = () => {
+    setOpenEmployeeModal(false);
+  };
+
+  const handleCloseConfirmModal = () => {
+    setOpenConfirmModal(false);
   };
 
   return (
@@ -98,7 +108,7 @@ const EmployeeList: React.FC = () => {
                 <TableCell>{emp.position}</TableCell>
                 <TableCell>
                   <Button onClick={(e) => handleEdit(emp._id, e)}>Edit</Button>
-                  <Button onClick={(e) => handleDelete(emp._id, e)}>
+                  <Button onClick={(e) => handleOpenConfirmModal(emp, e)}>
                     Delete
                   </Button>
                 </TableCell>
@@ -113,13 +123,33 @@ const EmployeeList: React.FC = () => {
       </Table>
 
       {/* EmployeeView Modal */}
-      <Dialog open={openModal} onClose={handleCloseModal}>
+      <Dialog open={openEmployeeModal} onClose={handleCloseEmployeeModal}>
         <DialogTitle>Employee Details</DialogTitle>
         <DialogContent>
           <EmployeeView employee={selectedEmployee} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal} color="primary">
+          <Button onClick={handleCloseEmployeeModal} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Confirmation Modal */}
+      <Dialog open={openConfirmModal} onClose={handleCloseConfirmModal}>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete{" "}
+          <strong>{selectedEmployee?.fullName}</strong>?
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => handleDelete(selectedEmployee?._id)}
+            color="error"
+          >
+            Delete
+          </Button>
+          <Button onClick={handleCloseConfirmModal} color="primary">
             Close
           </Button>
         </DialogActions>
