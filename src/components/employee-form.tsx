@@ -4,6 +4,7 @@ import { RootState, AppDispatch } from "../redux/store";
 import { updateEmployee } from "../redux/employee-slice";
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EmployeeForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,18 +34,26 @@ const EmployeeForm: React.FC = () => {
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (form) {
-      dispatch(updateEmployee(form));
-      navigate("/");
+      try {
+        await dispatch(updateEmployee(form)).unwrap();
+        toast.success("Employee updated successfully!");
+
+        navigate("/");
+      } catch (error: any) {
+        toast.error(
+          `Failed to update employee: ${error.message || "Unknown error"}`
+        );
+      }
     }
   };
 
   return (
     <form>
       <TextField
-        label="Name"
-        name="name"
+        label="fullName"
+        name="fullName"
         value={form.fullName}
         onChange={handleChange}
         fullWidth
