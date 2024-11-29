@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store";
 import {
   fetchEmployees,
   deleteEmployee,
   selectEmployee,
-  createEmployee,
 } from "../redux/employee-slice";
 import {
   Button,
@@ -14,22 +13,23 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
-// Define Employee type if not already defined
-interface Employee {
-  _id: string;
-  fullName: string;
-  email: string;
-  position: string;
-}
+import EmployeeView from "./employee-view";
 
 const EmployeeList: React.FC = () => {
   const employees = useSelector((state: RootState) => state.employees.list);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  // State to manage the modal visibility and selected employee
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
 
   useEffect(() => {
     dispatch(fetchEmployees());
@@ -59,12 +59,21 @@ const EmployeeList: React.FC = () => {
     navigate(`/create`);
   };
 
+  const handleRowClick = (employee: any) => {
+    setSelectedEmployee(employee); // Set the selected employee data
+    setOpenModal(true); // Open the modal
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false); // Close the modal
+  };
+
   return (
     <div>
       <Button
         variant="contained"
         color="primary"
-        onClick={() => handleCreate()} // Pass the employee object here
+        onClick={() => handleCreate()}
       >
         Create Employee
       </Button>
@@ -81,7 +90,7 @@ const EmployeeList: React.FC = () => {
         <TableBody>
           {Array.isArray(employees) && employees.length > 0 ? (
             employees.map((emp) => (
-              <TableRow key={emp._id}>
+              <TableRow key={emp._id} onClick={() => handleRowClick(emp)}>
                 <TableCell>{emp.fullName}</TableCell>
                 <TableCell>{emp.email}</TableCell>
                 <TableCell>{emp.position}</TableCell>
@@ -98,6 +107,19 @@ const EmployeeList: React.FC = () => {
           )}
         </TableBody>
       </Table>
+
+      {/* EmployeeView Modal */}
+      <Dialog open={openModal} onClose={handleCloseModal}>
+        <DialogTitle>Employee Details</DialogTitle>
+        <DialogContent>
+          <EmployeeView employee={selectedEmployee} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
