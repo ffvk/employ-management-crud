@@ -7,7 +7,6 @@ export interface Employee {
   _id: string;
   fullName: string;
   email: string;
-  position: string;
   image: string; // Dummy image URL
 }
 

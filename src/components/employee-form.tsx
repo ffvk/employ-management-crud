@@ -18,7 +18,6 @@ const EmployeeForm: React.FC = () => {
     _id: employee?._id || "",
     fullName: employee?.fullName || "",
     email: employee?.email || "",
-    position: employee?.position || "",
     image: employee?.image || "",
   });
 
@@ -77,14 +76,7 @@ const EmployeeForm: React.FC = () => {
         fullWidth
         margin="normal"
       />
-      <TextField
-        label="Position"
-        name="position"
-        value={form.position}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-      />
+
       <Button variant="contained" color="primary" onClick={handleSubmit}>
         {form._id ? "Update" : "Create"} Employee
       </Button>

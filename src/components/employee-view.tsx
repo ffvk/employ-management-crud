@@ -12,7 +12,7 @@ const EmployeeView: React.FC<EmployeeViewProps> = ({ employee }) => {
     <div>
       <h3>{employee.fullName}</h3>
       <p>Email: {employee.email}</p>
-      <p>Position: {employee.position}</p>
+      {/* <p>Position: {employee.position}</p> */}
       <p>
         Image: <img src={employee.image} alt="Employee" width="100" />
       </p>

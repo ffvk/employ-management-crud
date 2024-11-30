@@ -105,7 +105,6 @@ const EmployeeList: React.FC = () => {
               <TableRow key={emp._id} onClick={() => handleRowClick(emp)}>
                 <TableCell>{emp.fullName}</TableCell>
                 <TableCell>{emp.email}</TableCell>
-                <TableCell>{emp.position}</TableCell>
                 <TableCell>
                   <Button onClick={(e) => handleEdit(emp._id, e)}>Edit</Button>
                   <Button onClick={(e) => handleOpenConfirmModal(emp, e)}>

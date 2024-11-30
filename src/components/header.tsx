@@ -8,6 +8,8 @@ const Header: React.FC = () => {
     (state: RootState) => state.employees.selectedEmployee
   );
 
+  console.log("employee", employee);
+
   return (
     <AppBar position="static">
       <Toolbar>
