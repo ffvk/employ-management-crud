@@ -91,10 +91,11 @@ const employeeSlice = createSlice({
         state.list = state.list.filter((emp) => emp._id !== action.payload);
       })
       .addCase(updateEmployee.fulfilled, (state, action) => {
+        const updatedEmployee = action.payload.data; // Access the correct data structure
         state.list = state.list.map((emp) =>
-          emp._id === action.payload.id ? action.payload : emp
+          emp._id === updatedEmployee._id ? updatedEmployee : emp
         );
-        state.selectedEmployee = action.payload;
+        state.selectedEmployee = updatedEmployee;
       });
   },
 });

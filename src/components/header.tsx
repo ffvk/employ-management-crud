@@ -9,6 +9,7 @@ const Header: React.FC = () => {
   );
 
   console.log("employee", employee);
+  console.log("employee full name", employee?.fullName);
 
   return (
     <AppBar position="static">
