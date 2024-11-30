@@ -86,6 +86,7 @@ const EmployeeList: React.FC = () => {
         variant="contained"
         color="primary"
         onClick={() => handleCreate()}
+        sx={{ marginTop: 2 }}
       >
         Create Employee
       </Button>
